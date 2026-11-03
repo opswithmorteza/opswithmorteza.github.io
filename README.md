@@ -28,3 +28,9 @@ IRNIC stores authoritative nameservers. A DNS hosting service is required to cre
 ## Attribution
 
 Visual references supplied by the owner: Suraj Yadav portfolio-v4 and Tetra Dragon. This implementation uses original code and layout, not copied source or personal content. External projects retain their own licenses. Fonts are loaded from Google Fonts with system fallbacks.
+
+## Automatic project index
+
+The site reads the public GitHub repositories API on page load, excludes forks, archived/disabled repositories and the profile README repository, and displays original public repositories automatically. No token is included. On API errors or rate limits, a curated static fallback remains available. Update the `projects` array for bilingual descriptions of featured work. New repositories can use their GitHub descriptions.
+
+Professional content comes from the owner’s supplied resume and statements. The 5+ years figure is owner-provided. Residential address, birth date and other unrelated personal details are not published. Portfolio labs are described as demos, not historical client deployments.
