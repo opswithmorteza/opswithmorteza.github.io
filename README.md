@@ -47,3 +47,12 @@ The editorial project cards use original code and locally captured demo images. 
 - `games-core.js` / `games-extra.js`: original Tic-Tac-Toe (minimax computer) and Snake. `node test-games.cjs` verifies rules and all 569 complete human-move paths against the computer. Existing Pipeline Pairs remains available.
 
 The original photo was supplied by the owner; the approved portrait artwork was AI-assisted. New code follows this repository's MIT license. External ERP and mobile application source retain their own licenses and author credits. No customer deployments, independent security certification or third-party authorship is implied.
+
+
+## Compact editorial sections
+
+The classic view adds verified GitHub activity, a resume-based journey, a filterable horizontal project carousel, original technical notes, per-project details, light/dark theme, Ctrl+K navigation and email copying. All use browser-native APIs and original CSS/JavaScript. The three demo preview images total about 40 KB; images are reused and loaded lazily.
+
+`github-activity.json` is a dated snapshot from the official public GitHub contribution calendar. The interface labels it as a snapshot and never invents activity, awards or career dates. To refresh the calendar, run `python update_activity.py` and publish the changed JSON. Public repository totals also refresh in the browser from GitHub when available. The generator rejects incomplete/unknown calendar markup rather than filling it with fabricated numbers. No token is embedded.
+
+The source inspiration is the owner-supplied Suraj Yadav portfolio-v4 reference; no source, project screenshots, biography, awards or article text was copied from that site. Technical notes describe this account's actual public code and its documented limits.
