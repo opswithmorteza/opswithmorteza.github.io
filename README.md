@@ -65,7 +65,7 @@ The source inspiration is the owner-supplied Suraj Yadav portfolio-v4 reference;
 - Selecting an environment requests `portfolio-experience.css` and `portfolio-experience.js` in parallel, once per page. A loading message and retry support keep the chooser usable during slow connections.
 - Project previews use lazy loading, asynchronous decoding and low fetch priority. The calendar snapshot is fetched when its section approaches the viewport.
 - Anonymous first-paint / LCP / TTFB timings are exposed only as `data-*` attributes on the document for local QA; nothing is sent to an analytics server.
-- Cache-busted bundle URLs protect releases from stale CSS/JS. GitHub Pages provides its normal short browser/CDN caching. The site's DNS-only Cloudflare records do not proxy or cache website traffic.
+- Cache-busted bundle URLs protect releases from stale CSS/JS. GitHub Pages provides its normal short browser/CDN caching. The apex A records and www CNAME are proxied through Cloudflare with Full (Strict) TLS. An active 'Portfolio - bypass edge cache' rule bypasses edge caching for all incoming requests. GitHub Pages remains the origin. Email MX/TXT records stay DNS-only.
 
 To rebuild after changing the readable sources (Node/npm and Python required only for development):
 
@@ -77,3 +77,8 @@ node --test test-games.cjs
 The helper uses pinned `esbuild@0.27.2`, writes the minified bundles and embeds the updated entry script in `index.html`. The generated files are committed for GitHub Pages; no build is needed at runtime. When publishing a new bundle revision, update its `?v=` value in `portfolio-entry.js` before rebuilding.
 
 ISMS Risk Register Lite is an original MIT-licensed browser tool with a live demo, bilingual card and actual UI preview. Assessment records remain in the browser used for the demo.
+
+
+## Connection routing change — 2026-11-08
+
+Cloudflare proxying was enabled for the four GitHub Pages A records and the www CNAME after intermittent first-response stalls on the direct route. Full (Strict) origin validation and the active universal edge certificate were verified. The edge cache is bypassed, as requested by the site owner. Four paired fresh-connection checks produced HTTP 200 in about 0.29–0.31 s on the Cloudflare route; three direct requests took about 0.34–0.37 s and one timed out at 8 s. This is a small connection sample, not a guaranteed full-page load benchmark. Existing resolver caches can retain the old GitHub IPs until their previous TTL expires. Recheck both public DNS and the response's Server/CF-Cache-Status headers when troubleshooting.
