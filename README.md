@@ -1,6 +1,6 @@
 # Morteza Rajabi — Personal Space
 
-A bilingual portfolio with three experiences: Linux desktop, Windows desktop and a classic editorial portfolio. Built from scratch with HTML, CSS and JavaScript. No login, build step or backend.
+A bilingual portfolio with three experiences: Linux desktop, Windows desktop and a classic editorial portfolio. Built from scratch with HTML, CSS and JavaScript. No login or backend. Static runtime with an optional build step for the on-demand bundle.
 
 ## Content
 
@@ -15,7 +15,7 @@ The terminal is a browser simulation. It does not execute system commands.
 
 ## Editing
 
-Content and styles are in `index.html`. Update the `projects`, `apps`, `links`, `aboutHTML` and `focusHTML` definitions. Text with `data-en` and `data-fa` has both language variants.
+The entrance markup and critical styles are in `index.html`; its inline entry script is maintained in `portfolio-entry.js`. Base content (`projects`, `apps`, `links`, `aboutHTML`, `focusHTML`) lives in `portfolio-core.js`. Featured bilingual cards are in `showcase.js`. Text with `data-en` and `data-fa` has both language variants.
 
 ## Publishing
 
@@ -27,11 +27,11 @@ IRNIC stores authoritative nameservers. A DNS hosting service is required to cre
 
 ## Attribution
 
-Visual references supplied by the owner: Suraj Yadav portfolio-v4 and Tetra Dragon. This implementation uses original code and layout, not copied source or personal content. External projects retain their own licenses. Fonts are loaded from Google Fonts with system fallbacks.
+Visual references supplied by the owner: Suraj Yadav portfolio-v4 and Tetra Dragon. This implementation uses original code and layout, not copied source or personal content. External projects retain their own licenses. System fonts are used; no Google Fonts requests are required.
 
 ## Automatic project index
 
-The site reads the public GitHub repositories API on page load, excludes forks, archived/disabled repositories and the profile README repository, and displays original public repositories automatically. No token is included. On API errors or rate limits, a curated static fallback remains available. Update the `projects` array for bilingual descriptions of featured work. New repositories can use their GitHub descriptions.
+After a visitor enters an environment, the site reads the public GitHub repositories API during idle time (with a one-hour session cache), excludes forks, archived/disabled repositories and the profile README repository, and displays original public repositories automatically. No token is included. On API errors or rate limits, a curated static fallback remains available. Update the `projects` array for bilingual descriptions of featured work. New repositories can use their GitHub descriptions.
 
 Professional content comes from the owner’s supplied resume and statements. The 5+ years figure is owner-provided. Residential address, birth date and other unrelated personal details are not published. Portfolio labs are described as demos, not historical client deployments.
 
@@ -56,3 +56,24 @@ The classic view adds verified GitHub activity, a resume-based journey, a filter
 `github-activity.json` is a dated snapshot from the official public GitHub contribution calendar. The interface labels it as a snapshot and never invents activity, awards or career dates. To refresh the calendar, run `python update_activity.py` and publish the changed JSON. Public repository totals also refresh in the browser from GitHub when available. The generator rejects incomplete/unknown calendar markup rather than filling it with fabricated numbers. No token is embedded.
 
 The source inspiration is the owner-supplied Suraj Yadav portfolio-v4 reference; no source, project screenshots, biography, awards or article text was copied from that site. Technical notes describe this account's actual public code and its documented limits.
+
+
+## Fast entrance / on-demand experience
+
+- The initial chooser loads its inline critical CSS/JS and one responsive portrait image. No experience CSS, games, calendar JSON or GitHub API is requested on the entrance.
+- `entrance-desktop.webp`: 19 KB; `entrance-mobile.webp`: 8 KB. The Windows wallpaper loads only after entering that environment.
+- Selecting an environment requests `portfolio-experience.css` and `portfolio-experience.js` in parallel, once per page. A loading message and retry support keep the chooser usable during slow connections.
+- Project previews use lazy loading, asynchronous decoding and low fetch priority. The calendar snapshot is fetched when its section approaches the viewport.
+- Anonymous first-paint / LCP / TTFB timings are exposed only as `data-*` attributes on the document for local QA; nothing is sent to an analytics server.
+- Cache-busted bundle URLs protect releases from stale CSS/JS. GitHub Pages provides its normal short browser/CDN caching. The site's DNS-only Cloudflare records do not proxy or cache website traffic.
+
+To rebuild after changing the readable sources (Node/npm and Python required only for development):
+
+```sh
+python build_portfolio.py
+node --test test-games.cjs
+```
+
+The helper uses pinned `esbuild@0.27.2`, writes the minified bundles and embeds the updated entry script in `index.html`. The generated files are committed for GitHub Pages; no build is needed at runtime. When publishing a new bundle revision, update its `?v=` value in `portfolio-entry.js` before rebuilding.
+
+ISMS Risk Register Lite is an original MIT-licensed browser tool with a live demo, bilingual card and actual UI preview. Assessment records remain in the browser used for the demo.
