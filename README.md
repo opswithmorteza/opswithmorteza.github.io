@@ -65,7 +65,7 @@ The source inspiration is the owner-supplied Suraj Yadav portfolio-v4 reference;
 - Selecting an environment requests `portfolio-experience.css` and `portfolio-experience.js` in parallel, once per page. A loading message and retry support keep the chooser usable during slow connections.
 - Project previews use lazy loading, asynchronous decoding and low fetch priority. The calendar snapshot is fetched when its section approaches the viewport.
 - Anonymous first-paint / LCP / TTFB timings are exposed only as `data-*` attributes on the document for local QA; nothing is sent to an analytics server.
-- Cache-busted bundle URLs protect releases from stale CSS/JS. GitHub Pages provides its normal short browser/CDN caching. The apex A records and www CNAME are proxied through Cloudflare with Full (Strict) TLS. An active 'Portfolio - bypass edge cache' rule bypasses edge caching for all incoming requests. GitHub Pages remains the origin. Email MX/TXT records stay DNS-only.
+- Cache-busted bundle URLs protect releases from stale CSS/JS. GitHub Pages provides its normal short browser/CDN caching. The owner disabled Cloudflare proxying on 2026-11-09 because of reachability problems in Iran. The web records are DNS-only, serving GitHub Pages directly. Do not re-enable proxying as part of application fixes. The existing edge-cache bypass rule only applies if proxying is enabled.
 
 To rebuild after changing the readable sources (Node/npm and Python required only for development):
 
@@ -82,3 +82,10 @@ ISMS Risk Register Lite is an original MIT-licensed browser tool with a live dem
 ## Connection routing change — 2026-11-08
 
 Cloudflare proxying was enabled for the four GitHub Pages A records and the www CNAME after intermittent first-response stalls on the direct route. Full (Strict) origin validation and the active universal edge certificate were verified. The edge cache is bypassed, as requested by the site owner. Four paired fresh-connection checks produced HTTP 200 in about 0.29–0.31 s on the Cloudflare route; three direct requests took about 0.34–0.37 s and one timed out at 8 s. This is a small connection sample, not a guaranteed full-page load benchmark. Existing resolver caches can retain the old GitHub IPs until their previous TTL expires. Recheck both public DNS and the response's Server/CF-Cache-Status headers when troubleshooting.
+
+
+## Resilient portfolio entry — 2026-11-09
+
+The classic portfolio now has bilingual HTML content and working project/demo links before optional application downloads. Selecting Portfolio reveals that content immediately. The loader fetches CSS and JavaScript with an 8-second limit per attempt and one bounded retry. It executes the application only after the downloads settle, verifies the navigation export, and marks the interface ready only after navigation succeeds. On network or initialization failure, the basic portfolio remains usable with an explicit retry control. A script that arrives before CSS cannot hide the basic portfolio while styles are still downloading.
+
+Run `node --test test-entry.cjs` for delayed/offline downloads, incomplete script responses, successful enhancement, direct links and back-navigation regression cases.
