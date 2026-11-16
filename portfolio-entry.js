@@ -19,8 +19,8 @@ function getText(url,attempt=0){
 function load(){
  if(pending)return pending;
  if(initializationFailed){location.reload();return Promise.resolve();}
- const css=styleTask||(styleTask=getText('portfolio-experience.css?v=20261109').then(text=>{const el=document.createElement('style');el.dataset.portfolioStyle='true';el.textContent=text;document.head.append(el);styled=true;}).catch(()=>{styleTask=null;return false;}));
- const script=scriptTask||(scriptTask=getText('portfolio-experience.js?v=20261109').catch(error=>{scriptTask=null;throw error;}));
+ const css=styleTask||(styleTask=getText('portfolio-experience.css?v=20261116').then(text=>{const el=document.createElement('style');el.dataset.portfolioStyle='true';el.textContent=text;document.head.append(el);styled=true;}).catch(()=>{styleTask=null;return false;}));
+ const script=scriptTask||(scriptTask=getText('portfolio-experience.js?v=20261116').catch(error=>{scriptTask=null;throw error;}));
  pending=Promise.all([css,script]).then(([,text])=>{
   if(typeof window.__portfolioNavigate!=='function'){const el=document.createElement('script');el.dataset.portfolioScript='true';el.textContent=text;document.body.append(el);if(typeof window.__portfolioNavigate!=='function'){initializationFailed=true;throw Error('Initialization failed');}}
   window.__portfolioNavigate(target,false);ready=true;if(styled)delete classic.dataset.basic;busy(false);document.dispatchEvent(new Event('portfolio:ready'));
